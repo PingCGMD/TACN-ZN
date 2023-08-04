@@ -1,0 +1,68 @@
+title                    = Umbrella pulling simulation 
+define                   = -DPOSRES_TACNC
+integrator               = md
+dt                       = 0.02 ; 20fs ; 0.002	; 2 fs
+nsteps                   = 1000000; 20ns ; 25000000; 500 ns; 12500000; 250ns; 50000;for  test triclinic  box 12500000; 250ns; 100000000 ; 2000 ns  ; 25000
+
+nstxout                  = 50000
+nstvout                  = 50000
+nstfout                  = 50000
+nstlog                   = 5000; Output frequency for energies to log file and energy file 
+nstenergy                = 5000
+nstxtcout                = 25000 ;5000; Output frequency and precision for xtc file 
+;xtc_precision           = 5000
+constraints              = none 
+continuation             = no        ; Initial simulation 
+constraint_algorithm     = lincs     ; holonomic constraints 
+
+
+; Neighborsearching
+cutoff-scheme            = Verlet
+nstlist                  = 20 
+ns_type                  = grid
+pbc                      = xyz
+verlet-buffer-tolerance  = 0.005
+
+; Electrostatics
+coulombtype              = reaction-field 
+rcoulomb                 = 1.1
+epsilon_r                = 15    ; 2.5 (with polarizable water)
+epsilon_rf               = 0
+vdw_type                 = cutoff  
+vdw-modifier             = Potential-shift-verlet
+rvdw                     = 1.1
+
+tcoupl                   = v-rescale 
+tc-grps                  = Solute Solvent
+tau-t                    = 1.0 1.0; 1.0
+ref-t                    = 310 310; 300 
+Pcoupl                   = berendsen 
+Pcoupltype               = isotropic ; semiisotropic
+tau-p                    = 12.0 ; 4.0
+compressibility          = 3e-4 ;4.5e-5; 4.5e-5 
+ref-p                    = 1.0 ;1.0
+
+
+refcoord_scaling         = com
+; Periodic boundary conditions
+
+; Dispersion correction
+DispCorr                 = EnerPres          ; account for cut-off vdW scheme
+
+; Velocity generation
+gen_vel                  = yes               ; Velocity generation is on
+gen_temp                 = 310               ; temperature for velocity generation
+
+; Pull code
+pull                    = yes
+pull_ncoords            = 1         ; only one reaction coordinate
+pull_ngroups            = 2         ; two groups defining one reaction coordinate
+pull_group1_name        = HPNPP1
+pull_group2_name        = TACNALL
+pull_coord1_type        = umbrella  ; harmonic potential
+pull_coord1_geometry    = distance  ; simple distance increase
+pull_coord1_dim         = N N Y
+pull_coord1_groups      = 1 2
+pull_coord1_start       = yes       ; define initial COM distance > 0
+pull_coord1_rate        = 0.0       ; restrain in place 
+pull_coord1_k           = 500       ; kJ mol^-1 nm^-2

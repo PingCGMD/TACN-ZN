@@ -1,0 +1,62 @@
+title                    = Umbrella pulling simulation 
+define                   = -DPOSRES_TACNC
+integrator               = md
+dt                       = 0.02 ; 20fs
+nsteps                   = 100000; 2ns ;50000; 1ns for  bench; 500000000; 10micros ; 50000000; 1micro
+
+; Output control 
+nstxout                  = 10000   ; save every 200 ps 
+nstvout                  = 10000
+nstenergy                = 1000    ; save energies every 20 ps
+nstfout                  = 1000
+nstxout-compressed       = 1000
+compressed-x-precision   = 1000
+constraints              = none
+
+
+; Single-range cutoff scheme
+cutoff-scheme            = Verlet
+nstlist                  = 20
+ns_type                  = grid
+pbc                      = xyz
+verlet-buffer-tolerance  = 0.005
+
+; PME electrostatics parameters
+coulombtype              = reaction-field 
+rcoulomb                 = 1.1
+epsilon_r                = 15    ; 2.5 (with polarizable water)
+epsilon_rf               = 0
+vdw_type                 = cutoff  
+vdw-modifier             = Potential-shift-verlet
+rvdw                     = 1.1
+
+tcoupl                   = v-rescale 
+tc-grps                  = Solute Solvent; Water ;Protein Lipids Solvent 
+tau-t                    = 1.0 1.0; 1.0
+ref-t                    = 300 300; 310
+continuation             = yes
+gen-vel                  = no
+Pcoupl                   = parrinello-rahman 
+Pcoupltype               = isotropic ; semiisotropic
+tau-p                    = 12.0
+compressibility          = 3e-4 ;3e-4
+ref-p                    = 1.0 ;1.0
+
+refcoord_scaling         = com
+
+; Long-range dispersion correction
+DispCorr    = EnerPres
+
+; Pull code
+pull                    = yes
+pull_ncoords            = 1         ; only one reaction coordinate 
+pull_ngroups            = 2         ; two groups defining one reaction coordinate 
+pull_group1_name        = HPNPP1 
+pull_group2_name        = TACNALL
+pull_coord1_type        = umbrella  ; harmonic potential
+pull_coord1_geometry    = distance  ; simple distance increase 
+pull_coord1_dim         = N N Y
+pull_coord1_groups      = 1 2
+pull_coord1_start       = yes       ; define initial COM distance > 0
+pull_coord1_rate        = 0.005      ; 0.01 nm per ps = 10 nm per ns
+pull_coord1_k           = 500       ; kJ mol^-1 nm^-2
