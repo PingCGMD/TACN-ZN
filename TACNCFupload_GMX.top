@@ -1,0 +1,15 @@
+; TACNCFupload_GMX.top created by acpype (v: 2020-11-11T22:59:34CET) on Wed Dec 14 16:46:40 2022
+
+[ defaults ]
+; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ
+1               2               yes             0.5     0.8333
+
+; Include TACNCFupload_GMX.itp topology
+#include "TACNCFupload_GMX.itp"
+
+[ system ]
+ TACNCFupload
+
+[ molecules ]
+; Compound        nmols
+ TACNCFupload     1     

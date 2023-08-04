@@ -1,6 +1,6 @@
-gmx editconf -f TACNZN_ini.gro -bt cubic -d 1 -o TACNZN_inbox.gro
+gmx editconf -f TACNZNCF_ini.gro -bt cubic -d 1 -o TACNZNCF_inbox.gro
 
-gmx insert-molecules -f TACNZN_inbox.gro -ci TACNZN_ini.gro -o system0.gro -nmol 71 -box 49 49 49
+gmx insert-molecules -f TACNZNCF_inbox.gro -ci TACNZNCF_ini.gro -o system0.gro -nmol 71 -box 49 49 49
 
 gmx editconf -f system0.gro -o system_temp.gro -d 1.0 -bt cubic -box 49.26 49.26 49.26
 
