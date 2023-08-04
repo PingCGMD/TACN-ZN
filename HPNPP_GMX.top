@@ -1,0 +1,15 @@
+; HPNPP_GMX.top created by acpype (v: 2020-11-11T22:59:34CET) on Wed Jan  4 20:08:46 2023
+
+[ defaults ]
+; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ
+1               2               yes             0.5     0.8333
+
+; Include HPNPP_GMX.itp topology
+#include "HPNPP_GMX.itp"
+
+[ system ]
+ HPNPP
+
+[ molecules ]
+; Compound        nmols
+ HPNPP            1     
